@@ -1323,7 +1323,7 @@ static jint android_location_GnssLocationProvider_read_sv_status(JNIEnv* env, jo
 }
 
 static void android_location_GnssLocationProvider_agps_set_reference_location_cellid(
-        JNIEnv* /* env */, jobject /* obj */, jint type, jint mcc, jint mnc, jint lac, jint cid) {
+        JNIEnv* /* env */, jobject /* obj */, jint type, jint mcc, jint mnc, jint lac, jint cid, jint psc) {
     IAGnssRil::AGnssRefLocation location;
 
     if (agnssRilIface == nullptr) {
@@ -1339,6 +1339,11 @@ static void android_location_GnssLocationProvider_agps_set_reference_location_ce
           location.cellID.mnc = mnc;
           location.cellID.lac = lac;
           location.cellID.cid = cid;
+#ifdef AGPS_USE_PSC
+          location.cellID.psc = psc;
+#else
+          (void)psc;
+#endif
           break;
         default:
             ALOGE("Neither a GSM nor a UMTS cellid (%s:%d).", __FUNCTION__, __LINE__);
@@ -1946,7 +1951,7 @@ static const JNINativeMethod sMethods[] = {
             "(ILjava/lang/String;)V",
             reinterpret_cast<void *>(android_location_GnssLocationProvider_agps_set_id)},
     {"native_agps_set_ref_location_cellid",
-            "(IIIII)V",
+            "(IIIIII)V",
             reinterpret_cast<void *>(
                     android_location_GnssLocationProvider_agps_set_reference_location_cellid)},
     {"native_set_agps_server",

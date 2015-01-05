@@ -440,6 +440,7 @@ class ActivityStack extends Task {
 
         private void addActivityToRemove(ActivityRecord r) {
             if (r.app == mApp) {
+                r.launching = false;
                 mToRemove.add(r);
             }
         }
@@ -1627,6 +1628,7 @@ class ActivityStack extends Task {
         // appropriate for it.
         mStackSupervisor.mStoppingActivities.remove(next);
         next.setSleeping(false);
+        next.launching = true;
 
         if (DEBUG_SWITCH) Slog.v(TAG_SWITCH, "Resuming " + next);
 

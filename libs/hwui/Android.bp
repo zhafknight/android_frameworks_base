@@ -43,6 +43,11 @@ cc_defaults {
         device_uses_hwc2: {
             cflags: ["-DUSE_HWC2"],
         },
+        lineage: {
+            requires_synchronous_setsurface: {
+                cflags: ["-DREQUIRES_SYNCHRONOUS_SETSURFACE"],
+            },
+        },
     },
 }
 

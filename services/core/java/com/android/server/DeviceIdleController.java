@@ -100,9 +100,11 @@ public class DeviceIdleController extends SystemService
         implements AnyMotionDetector.DeviceIdleCallback {
     private static final String TAG = "DeviceIdleController";
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private static final boolean COMPRESS_TIME = false;
+
+    private static final boolean CUSTOM_TIME = true;
 
     private static final String ACTION_STEP_IDLE_STATE =
             "com.android.server.device_idle.STEP_IDLE_STATE";
@@ -554,30 +556,30 @@ public class DeviceIdleController extends SystemService
                 }
 
                 INACTIVE_TIMEOUT = mParser.getLong(KEY_INACTIVE_TIMEOUT,
-                        !COMPRESS_TIME ? 30 * 60 * 1000L : 3 * 60 * 1000L);
+                        CUSTOM_TIME ? 3 * 60 * 1000L : (!COMPRESS_TIME ? 30 * 60 * 1000L : 3 * 60 * 1000L));
                 SENSING_TIMEOUT = mParser.getLong(KEY_SENSING_TIMEOUT,
-                        !DEBUG ? 4 * 60 * 1000L : 60 * 1000L);
+                        CUSTOM_TIME ? 60 * 1000L : (!DEBUG ? 4 * 60 * 1000L : 60 * 1000L));
                 LOCATING_TIMEOUT = mParser.getLong(KEY_LOCATING_TIMEOUT,
-                        !DEBUG ? 30 * 1000L : 15 * 1000L);
+                        CUSTOM_TIME ? 15 * 1000L : (!DEBUG ? 30 * 1000L : 15 * 1000L));
                 LOCATION_ACCURACY = mParser.getFloat(KEY_LOCATION_ACCURACY, 20);
                 MOTION_INACTIVE_TIMEOUT = mParser.getLong(KEY_MOTION_INACTIVE_TIMEOUT,
-                        !COMPRESS_TIME ? 10 * 60 * 1000L : 60 * 1000L);
+                        CUSTOM_TIME ? 60 * 1000L : (!COMPRESS_TIME ? 10 * 60 * 1000L : 60 * 1000L));
                 IDLE_AFTER_INACTIVE_TIMEOUT = mParser.getLong(KEY_IDLE_AFTER_INACTIVE_TIMEOUT,
-                        !COMPRESS_TIME ? 30 * 60 * 1000L : 3 * 60 * 1000L);
+                        CUSTOM_TIME ? 3 * 60 * 1000L : (!COMPRESS_TIME ? 30 * 60 * 1000L : 3 * 60 * 1000L));
                 IDLE_PENDING_TIMEOUT = mParser.getLong(KEY_IDLE_PENDING_TIMEOUT,
-                        !COMPRESS_TIME ? 5 * 60 * 1000L : 30 * 1000L);
+                        CUSTOM_TIME ? 5 * 60 * 1000L : (!COMPRESS_TIME ? 5 * 60 * 1000L : 30 * 1000L));
                 MAX_IDLE_PENDING_TIMEOUT = mParser.getLong(KEY_MAX_IDLE_PENDING_TIMEOUT,
-                        !COMPRESS_TIME ? 10 * 60 * 1000L : 60 * 1000L);
+                        CUSTOM_TIME ? 10 * 60 * 1000L : (!COMPRESS_TIME ? 10 * 60 * 1000L : 60 * 1000L));
                 IDLE_PENDING_FACTOR = mParser.getFloat(KEY_IDLE_PENDING_FACTOR,
                         2f);
                 IDLE_TIMEOUT = mParser.getLong(KEY_IDLE_TIMEOUT,
-                        !COMPRESS_TIME ? 60 * 60 * 1000L : 6 * 60 * 1000L);
+                        CUSTOM_TIME ? 60 * 60 * 1000L : (!COMPRESS_TIME ? 60 * 60 * 1000L : 6 * 60 * 1000L));
                 MAX_IDLE_TIMEOUT = mParser.getLong(KEY_MAX_IDLE_TIMEOUT,
-                        !COMPRESS_TIME ? 6 * 60 * 60 * 1000L : 30 * 60 * 1000L);
+                        CUSTOM_TIME ? 6 * 60 * 60 * 1000L : (!COMPRESS_TIME ? 6 * 60 * 60 * 1000L : 30 * 60 * 1000L));
                 IDLE_FACTOR = mParser.getFloat(KEY_IDLE_FACTOR,
                         2f);
                 MIN_TIME_TO_ALARM = mParser.getLong(KEY_MIN_TIME_TO_ALARM,
-                        !COMPRESS_TIME ? 60 * 60 * 1000L : 6 * 60 * 1000L);
+                        CUSTOM_TIME ? 60 * 60 * 1000L : (!COMPRESS_TIME ? 60 * 60 * 1000L : 6 * 60 * 1000L));
                 MAX_TEMP_APP_WHITELIST_DURATION = mParser.getLong(
                         KEY_MAX_TEMP_APP_WHITELIST_DURATION, 5 * 60 * 1000L);
                 MMS_TEMP_APP_WHITELIST_DURATION = mParser.getLong(

@@ -191,6 +191,7 @@ static void sv_status_callback(GpsSvStatus* sv_status)
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
 }
 
+#ifndef GPS_LEGACY_CALLBACKS
 static void gnss_sv_status_callback(GnssSvStatus* sv_status) {
     JNIEnv* env = AndroidRuntime::getJNIEnv();
     size_t status_size = sv_status->size;
@@ -216,6 +217,7 @@ static void gnss_sv_status_callback(GnssSvStatus* sv_status) {
     env->CallVoidMethod(mCallbacksObj, method_reportSvStatus);
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
 }
+#endif
 
 static void nmea_callback(GpsUtcTime timestamp, const char* nmea, int length)
 {
@@ -228,6 +230,7 @@ static void nmea_callback(GpsUtcTime timestamp, const char* nmea, int length)
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
 }
 
+#ifndef GPS_LEGACY_CALLBACKS
 static void set_system_info_callback(const GnssSystemInfo* info) {
     ALOGD("set_system_info_callback: year_of_hw=%d\n", info->year_of_hw);
     JNIEnv* env = AndroidRuntime::getJNIEnv();
@@ -235,6 +238,7 @@ static void set_system_info_callback(const GnssSystemInfo* info) {
                         info->year_of_hw);
     checkAndClearExceptionFromCallback(env, __FUNCTION__);
 }
+#endif
 
 static void set_capabilities_callback(uint32_t capabilities)
 {
@@ -277,8 +281,10 @@ GpsCallbacks sGpsCallbacks = {
     release_wakelock_callback,
     create_thread_callback,
     request_utc_time_callback,
+#ifndef GPS_LEGACY_CALLBACKS
     set_system_info_callback,
     gnss_sv_status_callback,
+#endif
 };
 
 static void xtra_download_request_callback()

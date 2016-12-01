@@ -331,10 +331,10 @@ final class ColorFade {
                 destroyScreenshotTexture();
                 destroyGLShaders();
                 destroyGLBuffers();
-                destroyEglSurface();
             } finally {
                 detachEglContext();
             }
+            destroyEglSurface();
             // This is being called with no active context so shouldn't be
             // needed but is safer to not change for now.
             GLES20.glFlush();

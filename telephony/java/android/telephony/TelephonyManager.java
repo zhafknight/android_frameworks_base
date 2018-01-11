@@ -2537,28 +2537,7 @@ public class TelephonyManager {
             android.Manifest.permission.READ_PHONE_NUMBERS
     })
     public String getLine1Number(int subId) {
-        String number = null;
-        try {
-            ITelephony telephony = getITelephony();
-            if (telephony != null)
-                number = telephony.getLine1NumberForDisplay(subId, mContext.getOpPackageName());
-        } catch (RemoteException ex) {
-        } catch (NullPointerException ex) {
-        }
-        if (number != null) {
-            return number;
-        }
-        try {
-            IPhoneSubInfo info = getSubscriberInfo();
-            if (info == null)
-                return null;
-            return info.getLine1NumberForSubscriber(subId, mContext.getOpPackageName());
-        } catch (RemoteException ex) {
-            return null;
-        } catch (NullPointerException ex) {
-            // This could happen before phone restarts due to crashing
-            return null;
-        }
+        return "";
     }
 
     /**

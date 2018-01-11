@@ -206,6 +206,10 @@ class Utils {
     }
 
     static Size parseSize(Object o, Size fallback) {
+        if (o == null) {
+            return fallback;
+        }
+
         try {
             return Size.parseSize((String) o);
         } catch (ClassCastException e) {
@@ -234,6 +238,9 @@ class Utils {
     }
 
     static Range<Integer> parseIntRange(Object o, Range<Integer> fallback) {
+        if (o == null) {
+            return fallback;
+        }
         try {
             String s = (String)o;
             int ix = s.indexOf('-');
@@ -255,6 +262,9 @@ class Utils {
     }
 
     static Range<Long> parseLongRange(Object o, Range<Long> fallback) {
+        if (o == null) {
+            return fallback;
+        }
         try {
             String s = (String)o;
             int ix = s.indexOf('-');
@@ -276,6 +286,9 @@ class Utils {
     }
 
     static Range<Rational> parseRationalRange(Object o, Range<Rational> fallback) {
+        if (o == null) {
+            return fallback;
+        }
         try {
             String s = (String)o;
             int ix = s.indexOf('-');
@@ -297,6 +310,9 @@ class Utils {
     }
 
     static Pair<Size, Size> parseSizeRange(Object o) {
+        if (o == null) {
+            return null;
+        }
         try {
             String s = (String)o;
             int ix = s.indexOf('-');

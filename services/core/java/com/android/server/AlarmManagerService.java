@@ -2677,6 +2677,9 @@ class AlarmManagerService extends SystemService {
      */
     void setWakelockWorkSource(PendingIntent pi, WorkSource ws, int type, String tag,
             int knownUid, boolean first) {
+        if (pi == null)
+            return;
+
         try {
             final boolean unimportant = pi == mTimeTickSender;
             mWakeLock.setUnimportantForLogging(unimportant);

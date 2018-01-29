@@ -127,6 +127,10 @@ public class UsbDebuggingManager {
             try {
                 byte[] buffer = new byte[BUFFER_SIZE];
                 while (true) {
+                    if (mInputStream == null) {
+                        Slog.e(TAG, "mInputStream is null");
+                        break;
+                    }
                     int count = mInputStream.read(buffer);
                     if (count < 0) {
                         break;
@@ -135,7 +139,15 @@ public class UsbDebuggingManager {
                     if (buffer[0] == 'P' && buffer[1] == 'K') {
                         String key = new String(Arrays.copyOfRange(buffer, 2, count));
                         Slog.d(TAG, "Received public key: " + key);
+                        if (mHandler == null) {
+                            Slog.e(TAG, "mHandler is null");
+                            break;
+                        }
                         Message msg = mHandler.obtainMessage(UsbDebuggingHandler.MESSAGE_ADB_CONFIRM);
+                        if (msg == null) {
+                            Slog.e(TAG, "msg is null");
+                            break;
+                        }
                         msg.obj = key;
                         mHandler.sendMessage(msg);
                     } else {

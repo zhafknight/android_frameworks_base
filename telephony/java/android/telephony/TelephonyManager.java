@@ -1154,11 +1154,19 @@ public class TelephonyManager {
                 return null;
             }
             Bundle bundle = telephony.getCellLocation(mContext.getOpPackageName());
+            if (bundle == null) {
+                Rlog.d(TAG, "getCellLocation returning null because bundle is null");
+                return null;
+            }
             if (bundle.isEmpty()) {
                 Rlog.d(TAG, "getCellLocation returning null because bundle is empty");
                 return null;
             }
             CellLocation cl = CellLocation.newFromBundle(bundle);
+            if (cl == null) {
+                Rlog.d(TAG, "getCellLocation returning null because CellLocation is null");
+                return null;
+            }
             if (cl.isEmpty()) {
                 Rlog.d(TAG, "getCellLocation returning null because CellLocation is empty");
                 return null;

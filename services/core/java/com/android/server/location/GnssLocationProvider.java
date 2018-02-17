@@ -2174,6 +2174,7 @@ public class GnssLocationProvider implements LocationProviderInterface {
                 }
                 native_agps_set_ref_location_cellid(type, mcc, mnc,
                         gsm_cell.getLac(), gsm_cell.getCid());
+                Log.e(TAG,"gps == PSC:" + gsm_cell.getPsc() + " %d ==");
             } else {
                 Log.e(TAG,"Error getting cell location info.");
             }

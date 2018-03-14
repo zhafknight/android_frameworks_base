@@ -1609,6 +1609,7 @@ public final class StrictMode {
             if ((info.policy & PENALTY_LOG) != 0 && sListener != null) {
                 sListener.onViolation(info.crashInfo.stackTrace);
             }
+
             if ((info.policy & PENALTY_LOG) != 0 &&
                 timeSinceLastViolationMillis > MIN_LOG_INTERVAL_MS) {
                 if (info.durationMillis != -1) {
@@ -1658,11 +1659,14 @@ public final class StrictMode {
                     // to disk, thus violating policy, thus requiring logging, etc...
                     // We restore the current policy below, in the finally block.
                     setThreadPolicyMask(0);
-
-                    ActivityManager.getService().handleApplicationStrictModeViolation(
-                        RuntimeInit.getApplicationObject(),
-                        violationMaskSubset,
-                        info);
+                    if (ActivityManager.getService() == null) {
+                        return;
+                    } else {
+                        ActivityManager.getService().handleApplicationStrictModeViolation(
+                            RuntimeInit.getApplicationObject(),
+                            violationMaskSubset,
+                            info);
+                    }
                 } catch (RemoteException e) {
                     if (e instanceof DeadObjectException) {
                         // System process is dead; ignore

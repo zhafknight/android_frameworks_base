@@ -70,6 +70,9 @@ public class ChangeBounds extends Transition {
 
                 @Override
                 public void set(Drawable object, PointF value) {
+                    if (object == null || value == null)
+                        return;
+
                     object.copyBounds(mBounds);
                     mBounds.offsetTo(Math.round(value.x), Math.round(value.y));
                     object.setBounds(mBounds);
@@ -86,6 +89,9 @@ public class ChangeBounds extends Transition {
             new Property<ViewBounds, PointF>(PointF.class, "topLeft") {
                 @Override
                 public void set(ViewBounds viewBounds, PointF topLeft) {
+                    if (viewBounds == null)
+                        return;
+
                     viewBounds.setTopLeft(topLeft);
                 }
 
@@ -99,6 +105,9 @@ public class ChangeBounds extends Transition {
             new Property<ViewBounds, PointF>(PointF.class, "bottomRight") {
                 @Override
                 public void set(ViewBounds viewBounds, PointF bottomRight) {
+                    if (viewBounds == null)
+                        return;
+
                     viewBounds.setBottomRight(bottomRight);
                 }
 
@@ -112,6 +121,9 @@ public class ChangeBounds extends Transition {
             new Property<View, PointF>(PointF.class, "bottomRight") {
                 @Override
                 public void set(View view, PointF bottomRight) {
+                    if (view == null || bottomRight == null)
+                        return;
+
                     int left = view.getLeft();
                     int top = view.getTop();
                     int right = Math.round(bottomRight.x);
@@ -129,6 +141,9 @@ public class ChangeBounds extends Transition {
             new Property<View, PointF>(PointF.class, "topLeft") {
                 @Override
                 public void set(View view, PointF topLeft) {
+                    if (view == null || topLeft == null)
+                        return;
+
                     int left = Math.round(topLeft.x);
                     int top = Math.round(topLeft.y);
                     int right = view.getRight();
@@ -146,6 +161,9 @@ public class ChangeBounds extends Transition {
             new Property<View, PointF>(PointF.class, "position") {
                 @Override
                 public void set(View view, PointF topLeft) {
+                    if (view == null || topLeft == null)
+                        return;
+
                     int left = Math.round(topLeft.x);
                     int top = Math.round(topLeft.y);
                     int right = left + view.getWidth();

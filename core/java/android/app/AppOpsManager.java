@@ -2048,7 +2048,7 @@ public class AppOpsManager {
      */
     public void checkPackage(int uid, String packageName) {
         try {
-            if (mService.checkPackage(uid, packageName) != MODE_ALLOWED) {
+            if (mService != null && mService.checkPackage(uid, packageName) != MODE_ALLOWED) {
                 throw new SecurityException(
                         "Package " + packageName + " does not belong to " + uid);
             }

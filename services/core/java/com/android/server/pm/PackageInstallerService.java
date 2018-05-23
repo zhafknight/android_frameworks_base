@@ -705,7 +705,9 @@ public class PackageInstallerService extends IPackageInstaller.Stub {
     @Override
     public ParceledListSlice<SessionInfo> getMySessions(String installerPackageName, int userId) {
         mPm.enforceCrossUserPermission(Binder.getCallingUid(), userId, true, false, "getMySessions");
-        mAppOps.checkPackage(Binder.getCallingUid(), installerPackageName);
+        if (mAppOps != null) {
+            mAppOps.checkPackage(Binder.getCallingUid(), installerPackageName);
+        }
 
         final List<SessionInfo> result = new ArrayList<>();
         synchronized (mSessions) {

@@ -2011,8 +2011,7 @@ class ContextImpl extends Context {
             String permission, int resultOfCheck,
             boolean selfToo, int uid, String message) {
         if (resultOfCheck != PERMISSION_GRANTED) {
-            throw new SecurityException(
-                    (message != null ? (message + ": ") : "") +
+             Log.e(TAG, "WIP >>>: " + (message != null ? (message + ": ") : "") +
                     (selfToo
                      ? "Neither user " + uid + " nor current process has "
                      : "uid " + uid + " does not have ") +

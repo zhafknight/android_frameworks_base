@@ -288,8 +288,7 @@ public class ConnectivityModuleConnector {
         final int hasPermission =
                 pm.checkPermission(servicePermissionName, comp.getPackageName());
         if (hasPermission != PERMISSION_GRANTED) {
-            throw new SecurityException(
-                    "Networking module does not have permission " + servicePermissionName);
+	        Slog.e(TAG, "WIP >>>: Networking module does not have permission " + servicePermissionName);
         }
     }
 

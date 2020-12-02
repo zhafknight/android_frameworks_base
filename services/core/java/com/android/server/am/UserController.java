@@ -1909,7 +1909,7 @@ class UserController implements Handler.Callback {
                     targetUserId = callingUserId;
                 } else {
                     StringBuilder builder = new StringBuilder(128);
-                    builder.append("Permission Denial: ");
+                    builder.append("WIP >>>: Permission Denial: ");
                     builder.append(name);
                     if (callerPackage != null) {
                         builder.append(" from ");
@@ -1933,8 +1933,7 @@ class UserController implements Handler.Callback {
                         }
                     }
                     String msg = builder.toString();
-                    Slog.w(TAG, msg);
-                    throw new SecurityException(msg);
+                    Slog.e(TAG, msg);
                 }
             }
         }

@@ -100,6 +100,8 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
         DisplayWhiteBalanceController.Callbacks {
     private static final String SCREEN_ON_BLOCKED_TRACE_NAME = "Screen on blocked";
     private static final String SCREEN_OFF_BLOCKED_TRACE_NAME = "Screen off blocked";
+    private static final boolean COLORFADE_ENABLED =
+            SystemProperties.getBoolean("ro.displaypower.colorfade", true);
 
     private static final boolean DEBUG = false;
     private static final boolean DEBUG_PRETEND_PROXIMITY_SENSOR_ABSENT = false;
@@ -527,7 +529,7 @@ final class DisplayPowerController implements AutomaticBrightnessController.Call
 
         setUpAutoBrightness(resources, handler);
 
-        mColorFadeEnabled = !ActivityManager.isLowRamDeviceStatic();
+        mColorFadeEnabled = COLORFADE_ENABLED && !ActivityManager.isLowRamDeviceStatic();
         mColorFadeFadesConfig = resources.getBoolean(
                 com.android.internal.R.bool.config_animateScreenLights);
 

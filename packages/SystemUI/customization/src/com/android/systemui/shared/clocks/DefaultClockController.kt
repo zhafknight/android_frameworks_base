@@ -131,9 +131,9 @@ class DefaultClockController(
         fun updateColor() {
             val color =
                 if (isRegionDark) {
-                    resources.getColor(android.R.color.system_accent1_100)
+                    resources.getColor(android.R.color.white)
                 } else {
-                    resources.getColor(android.R.color.system_accent2_600)
+                    resources.getColor(android.R.color.white)
                 }
 
             if (currentColor == color) {

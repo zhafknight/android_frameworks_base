@@ -23,7 +23,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.graphics.Color
 import android.os.Trace
 import android.os.Trace.TRACE_TAG_APP
 import android.util.Pair

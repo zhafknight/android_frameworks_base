@@ -57,6 +57,7 @@ import android.app.Fragment;
 import android.app.StatusBarManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -122,6 +123,7 @@ import com.android.keyguard.dagger.KeyguardStatusBarViewComponent;
 import com.android.keyguard.dagger.KeyguardStatusViewComponent;
 import com.android.keyguard.dagger.KeyguardUserSwitcherComponent;
 import com.android.systemui.DejankUtils;
+import com.android.systemui.Dependency;
 import com.android.systemui.Dumpable;
 import com.android.systemui.R;
 import com.android.systemui.animation.ActivityLaunchAnimator;
@@ -207,6 +209,7 @@ import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.phone.KeyguardClockPositionAlgorithm;
 import com.android.systemui.statusbar.phone.KeyguardStatusBarView;
 import com.android.systemui.statusbar.phone.KeyguardStatusBarViewController;
+import com.android.systemui.statusbar.phone.LightBarController;
 import com.android.systemui.statusbar.phone.LockscreenGestureLogger;
 import com.android.systemui.statusbar.phone.LockscreenGestureLogger.LockscreenUiEvent;
 import com.android.systemui.statusbar.phone.ScreenOffAnimationController;
@@ -400,6 +403,7 @@ public final class NotificationPanelViewController implements Dumpable {
     private FrameLayout mQsFrame;
     private final QsFrameTranslateController mQsFrameTranslateController;
     private KeyguardStatusViewController mKeyguardStatusViewController;
+    private final LightBarController mLightBarController;
     private final LockIconViewController mLockIconViewController;
     private NotificationsQuickSettingsContainer mNotificationContainerParent;
     private final NotificationsQSContainerController mNotificationsQSContainerController;
@@ -723,6 +727,10 @@ public final class NotificationPanelViewController implements Dumpable {
         }
     };
 
+    private final Runnable mUpdateNavColorRunnable = () -> {
+        updateNavColors(true);
+    };
+
     private final Consumer<TransitionStep> mDreamingToLockscreenTransition =
             (TransitionStep step) -> {
                 mIsToLockscreenTransitionRunning =
@@ -954,6 +962,7 @@ public final class NotificationPanelViewController implements Dumpable {
         });
         mConversationNotificationManager = conversationNotificationManager;
         mAuthController = authController;
+        mLightBarController = Dependency.get(LightBarController.class);
         mLockIconViewController = lockIconViewController;
         mScreenOffAnimationController = screenOffAnimationController;
         mUnlockedScreenOffAnimationController = unlockedScreenOffAnimationController;
@@ -3590,6 +3599,15 @@ public final class NotificationPanelViewController implements Dumpable {
         return mPanelExpanded;
     }
 
+    private void updateNavColors(boolean expanded) {
+        mLightBarController.setQsExpanded(expanded && !isNightMode());
+    }
+
+    private boolean isNightMode() {
+        return (mView.getContext().getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    }
+
     private int calculatePanelHeightShade() {
         int emptyBottomMargin = mNotificationStackScrollLayoutController.getEmptyBottomMargin();
         int maxHeight = mNotificationStackScrollLayoutController.getHeight() - emptyBottomMargin;
@@ -5578,6 +5596,15 @@ public final class NotificationPanelViewController implements Dumpable {
         }
 
         @Override
+        public void onUiModeChanged() {
+            debugLog("onUiModeChanged");
+            if (mCurrentPanelState != STATE_CLOSED) {
+                // Update navigation color after configuration change.
+                postToView(mUpdateNavColorRunnable);
+            }
+        }
+
+        @Override
         public void onSmallestScreenWidthChanged() {
             Trace.beginSection("onSmallestScreenWidthChanged");
             debugLog("onSmallestScreenWidthChanged");
@@ -5922,6 +5949,7 @@ public final class NotificationPanelViewController implements Dumpable {
         if (state == STATE_OPEN && mCurrentPanelState != state) {
             setQsExpandImmediate(false);
             mView.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+            updateNavColors(true);
         }
         if (state == STATE_OPENING) {
             // we need to ignore it on keyguard as this is a false alarm - transition from unlocked
@@ -5929,6 +5957,7 @@ public final class NotificationPanelViewController implements Dumpable {
             // the shade, lockscreen is just always expanded
             if (mSplitShadeEnabled && !isOnKeyguard()) {
                 setQsExpandImmediate(true);
+                updateNavColors(true);
             }
             mOpenCloseListener.onOpenStarted();
         }
@@ -5937,6 +5966,8 @@ public final class NotificationPanelViewController implements Dumpable {
             // Close the status bar in the next frame so we can show the end of the
             // animation.
             mView.post(mMaybeHideExpandedRunnable);
+            updateNavColors(false);
+            mView.removeCallbacks(mUpdateNavColorRunnable);
         }
         mCurrentPanelState = state;
     }

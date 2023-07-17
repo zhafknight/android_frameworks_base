@@ -9252,6 +9252,12 @@ public final class Settings {
         public static final String SENTRY_USERID = "sentry_userid";
 
         /**
+         * License ID for /e/ OS updates
+         * @hide
+         */
+        public static final String E_LICENSE_ID = "e_license_id";
+
+        /**
          * Whether complications are enabled to be shown over the screensaver by the user.
          *
          * @hide

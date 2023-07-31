@@ -22,5 +22,5 @@
         android:height="24dp">
     <path
         android:pathData="M7 10l5 5 5 -5z"
-        android:fillColor="@android:color/black"/>
+        android:fillColor="@color/settingslib_spinner_dropdown_color"/>
 </vector>

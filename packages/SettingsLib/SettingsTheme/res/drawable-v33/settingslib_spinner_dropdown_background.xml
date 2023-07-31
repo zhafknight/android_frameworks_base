@@ -28,7 +28,7 @@
             <item>
                 <shape>
                     <corners android:radius="10dp"/>
-                    <solid android:color="@android:color/system_accent2_100"/>
+                    <solid android:color="?android:attr/colorBackgroundFloating"/>
                 </shape>
             </item>
         </layer-list>

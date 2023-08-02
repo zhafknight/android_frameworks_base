@@ -769,7 +769,7 @@
     </style>
 
     <style name="FloatingOverlay" parent="@android:style/Theme.DeviceDefault.DayNight">
-        <item name="overlayButtonTextColor">?android:attr/textColorPrimary</item>
+        <item name="overlayButtonTextColor">?android:attr/colorBackground</item>
     </style>
 
     <style name="EditTextActivityButton" parent="@android:style/Widget.DeviceDefault.Button.Colored">

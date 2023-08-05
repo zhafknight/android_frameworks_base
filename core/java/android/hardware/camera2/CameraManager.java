@@ -116,14 +116,8 @@ public final class CameraManager {
     @ChangeId
     @Overridable
     @EnabledSince(targetSdkVersion = android.os.Build.VERSION_CODES.BASE)
-    public static final long OVERRIDE_CAMERA_LANDSCAPE_TO_PORTRAIT = 250678880L;
-
-    /**
-     * Package-level opt in/out for the above.
-     * @hide
-     */
-    public static final String PROPERTY_COMPAT_OVERRIDE_LANDSCAPE_TO_PORTRAIT =
-            "android.camera.PROPERTY_COMPAT_OVERRIDE_LANDSCAPE_TO_PORTRAIT";
+    @TestApi
+    public static final long OVERRIDE_FRONT_CAMERA_APP_COMPAT = 250678880L;
 
     /**
      * System property for allowing the above
@@ -626,7 +620,7 @@ public final class CameraManager {
             try {
                 Size displaySize = getDisplaySize();
 
-                boolean overrideToPortrait = shouldOverrideToPortrait(mContext);
+                boolean overrideToPortrait = shouldOverrideToPortrait();
                 CameraMetadataNative info = cameraService.getCameraCharacteristics(cameraId,
                         mContext.getApplicationInfo().targetSdkVersion, overrideToPortrait);
                 try {
@@ -746,7 +740,7 @@ public final class CameraManager {
                         "Camera service is currently unavailable");
                 }
 
-                boolean overrideToPortrait = shouldOverrideToPortrait(mContext);
+                boolean overrideToPortrait = shouldOverrideToPortrait();
                 cameraUser = cameraService.connectDevice(callbacks, cameraId,
                     mContext.getOpPackageName(), mContext.getAttributionTag(), uid,
                     oomScoreOffset, mContext.getApplicationInfo().targetSdkVersion,
@@ -1178,26 +1172,9 @@ public final class CameraManager {
         return CameraManagerGlobal.get().getTorchStrengthLevel(cameraId);
     }
 
-    /**
-     * @hide
-     */
-    public static boolean shouldOverrideToPortrait(@Nullable Context context) {
-        if (!CameraManagerGlobal.sLandscapeToPortrait) {
-            return false;
-        }
-
-        if (context != null) {
-            PackageManager packageManager = context.getPackageManager();
-
-            try {
-                return packageManager.getProperty(context.getOpPackageName(),
-                            PROPERTY_COMPAT_OVERRIDE_LANDSCAPE_TO_PORTRAIT).getBoolean();
-            } catch (PackageManager.NameNotFoundException e) {
-                // No such property
-            }
-        }
-
-        return CompatChanges.isChangeEnabled(OVERRIDE_CAMERA_LANDSCAPE_TO_PORTRAIT);
+    private static boolean shouldOverrideToPortrait() {
+        return CompatChanges.isChangeEnabled(OVERRIDE_FRONT_CAMERA_APP_COMPAT)
+                && CameraManagerGlobal.sLandscapeToPortrait;
     }
 
     /**

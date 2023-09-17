@@ -134,7 +134,7 @@ public class MtpDocumentsProvider extends DocumentsProvider {
         // TODO: Mount AppFuse on demands.
         try {
             mAppFuse.mount(getContext().getSystemService(StorageManager.class));
-        } catch (IOException error) {
+        } catch (Exception error) {
             Log.e(TAG, "Failed to start app fuse.", error);
             return false;
         }
